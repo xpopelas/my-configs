@@ -1,0 +1,18 @@
+#!/bin/sh
+
+focus=$(xdotool getactivewindow getwindowname)
+focus_Number=$(xdotool getactivewindow getwindowname | wc -c)
+Focus_N=$(xdotool getactivewindow getwindowname | head -c 20 )
+
+if [ "$focus" = "" ];then
+	echo -e ""
+	pkill -RTMIN+13 i3blocks
+else
+    if [ "$focus_Number" -gt "40" ];then
+        echo -e " : $Focus_N ..."
+	pkill -RTMIN+13 i3blocks
+    else
+        echo -e " : $focus"
+	pkill -RTMIN+13 i3blocks
+    fi
+fi

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+killall conky
+sleep 5s
+conky -c ~/.conkyrc &
+sleep 2s
+conky -c ~/.conkyrc2 &
+exit

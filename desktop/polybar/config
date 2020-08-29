@@ -1,0 +1,461 @@
+;=====================================================
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/jaagr/polybar
+;
+;   The README contains alot of information
+;
+;=====================================================
+
+; Custom made config by xpopelas based on some random config
+
+[colors]
+black = #000
+white = #fff
+transparent = #00000000
+red = #FF0000
+green = #0B6623
+gray = #55
+
+; color scheme related specific colors
+dark-black-bg  = #0f1417
+slight-gray-fg = #d3daec
+vivid-pink-fg  = #ff1d99
+light-pink-fg  = #ff61b7
+
+
+background = ${self.dark-black-bg}
+background-alt = #37386d
+foreground = ${self.slight-gray-fg}
+foreground-alt = ${self.vivid-pink-fg}
+foreground-alt2 = ${self.light-pink-fg}
+alert = #bd2c40
+primary = #ffb52a
+secondary = #e60053
+
+;==============================================================================
+
+[bar/main-monitor-philips]
+monitor = DisplayPort-1
+width = 100%
+height = 35
+radius = 0.0
+
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 4
+
+border-size = 0
+border-color = ${colors.white}
+
+padding-left = 5
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = "Fira Code:size=11"
+font-1 = Sans:pixelsize=11;1
+font-2 = unifont:fontformat=truetype:size=8:antialias=false;0
+;font-2 = "Font Awesome 5 Free:style=Solid:pixelsize=10;1"
+;font-3 = "Font Awesome 5 Free:style=Regular:pixelsize=10;1"
+;font-4 = "Font Awesome 5 Brands:pixelsize=10;1"
+font-3 = "Font Awesome 5 Free, Font Awesome 5 Free Solid:style=Solid"
+font-4 = "Font Awesome 5 Free, Font Awesome 5 Free Regular:style=Regular"
+font-5 = "Font Awesome 5 Brands, Font Awesome 5 Brands Regular:style=Regular;"
+font-6 = MaterialIcons:size=10;0
+
+;modules-left = i3 previous playpause next spotify
+modules-left = i3
+modules-center = date
+;modules-right = screen volume xkeyboard memory cpu
+modules-right = xkeyboard memory cpu wired-network
+
+tray-position = right
+tray-maxsize = 20
+tray-background = ${colors.transparent}
+tray-offset-x = 0
+tray-offset-y = 0
+tray-padding = 0
+tray-scale = 1.0
+
+wm-restack = i3
+
+enable-ipc = true
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+;==============================================================================;
+; vvvv Left side of the polybar vvvv                                           ;
+;==============================================================================;
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+ws-icon-0 = "1; "
+ws-icon-1 = "2; "
+ws-icon-2 = "3; "
+ws-icon-3 = "4; "
+ws-icon-4 = "5; "
+ws-icon-5 = "6; "
+ws-icon-6 = "7; "
+ws-icon-7 = "8; "
+ws-icon-8 = "9; "
+ws-icon-9 = "10; "
+
+label-mode-padding = 1
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %icon%%name%
+label-focused-background = ${colors.transparent}
+label-focused-overline = ${colors.foreground-alt}
+label-focused-padding = 1
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %icon%%name%
+;label-unfocused-overline = ${colors.foreground-alt2}
+label-unfocused-padding = 1
+
+; visible = Active workspace on unfocused monitor
+label-visible = %icon%%name%
+label-visible-background = ${self.label-focused-background}
+;label-visible-underline = ${self.label-focused-underline}
+label-visible-overline = ${colors.foreground-alt2}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %icon%%name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+;==============================================================================;
+;     vvvv Spotify related config below vvvv                                   ;
+;==============================================================================;
+
+[module/previous]
+type = custom/script
+interval = 86400
+format = "%{T3}<label>"
+format-padding = 1
+; Previous song icon
+exec = echo " "
+;format-underline = #1db954
+line-size = 1
+click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
+
+[module/next]
+type = custom/script
+interval = 86400
+format = "%{T3}<label>"
+format-padding = 1
+; Next song icon
+exec = echo ""
+;format-underline = #1db954
+line-size = 1
+click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
+
+[module/playpause]
+type = custom/ipc
+; Default
+hook-0 = echo "  "
+; Playing
+hook-1 = echo "  "
+; Paused
+hook-2 = echo "  "
+initial = 1
+;format-underline = #1db954
+format-padding = 1
+line-size = 1
+click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+
+[module/spotify]
+type = custom/ipc
+hook-0 = python3 ~/.config/polybar/spotify_status.py
+hook-1 = python3 ~/.config/polybar/spotify_status.py
+click-left = python3 ~/.config/polybar/spotify.py
+initial = 1
+;format-underline = #1db954
+format-padding = 3
+line-size = 1
+
+
+;==============================================================================;
+;     /\/\ Spotify related config above /\/\                                   ;
+;==============================================================================;
+
+;==============================================================================;
+; /\/\ Left side of the polybar /\/\                                           ;
+;==============================================================================;
+
+
+;==============================================================================;
+; vvvv Center of the polybar vvvv                                              ;
+;==============================================================================;
+
+[module/date]
+type = internal/date
+interval = 1
+
+date =
+date-alt = " %Y-%m-%d"
+time = %H:%M
+time-alt = %H:%M:%S
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+label = %date% %time%
+format-padding = 5
+
+;==============================================================================;
+; /\/\ Center of the polybar /\/\                                              ;
+;==============================================================================;
+
+;==============================================================================;
+; vvvv Right side of the polybar vvvv                                          ;
+;==============================================================================;
+
+[module/wireless-network]
+type = internal/network
+interface = wlan0
+interval = 3.0
+ping-interval = 10
+
+format-connected = <ramp-signal> <label-connected>
+label-connected = %essid%
+label-disconnected =    not connected
+label-disconnected-foreground = #66
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+
+animation-packetloss-0 = 
+animation-packetloss-0-foreground = #ffa64c
+animation-packetloss-1 = 
+animation-packetloss-1-foreground = ${bar/top.foreground}
+animation-packetloss-framerate = 500
+
+[module/screen]
+type = custom/script
+interval = 0.2
+exec = ~/.config/polybar/backlight.sh
+
+scroll-up = exec light -A 5
+scroll-down = exec light -U 5
+
+format-prefix = " "
+
+label = %output%
+label-foreground = ${colors.foreground}
+format-padding = 1
+
+[module/volume]
+type = internal/alsa
+
+format-volume = <label-volume> <bar-volume>
+label-volume-foreground = ${root.foreground}
+
+format-muted-prefix = " "
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = sound muted
+
+bar-volume-width = 15
+; bar-volume-foreground-8 = #55aa55
+; bar-volume-foreground-7 = #7da942
+; bar-volume-foreground-6 = #a5a82f
+; bar-volume-foreground-5 = #cda71c
+; bar-volume-foreground-4 = #f5a70a
+; bar-volume-foreground-3 = #f7921c
+; bar-volume-foreground-2 = #fa7e2f
+; bar-volume-foreground-1 = #fc6942
+; bar-volume-foreground-0 = #ff5555
+bar-volume-foreground-0 = #ff61b7
+bar-volume-foreground-1 = #ff58b3
+bar-volume-foreground-2 = #ff50af
+bar-volume-foreground-3 = #ff47ab
+bar-volume-foreground-4 = #ff3fa8
+bar-volume-foreground-5 = #ff36a4
+bar-volume-foreground-6 = #ff2ea0
+bar-volume-foreground-7 = #ff259c
+bar-volume-foreground-8 = #ff1d99
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = #555
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+
+label-layout = %layout%
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = ${colors.secondary}
+label-indicator-underline = ${colors.secondary}
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+label = %percentage_used%%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+label = %percentage%%
+
+[module/battery]
+type = internal/battery
+full-at = 98
+
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+format-full = <ramp-capacity> <label-full>
+
+ramp-capacity-0 = 
+ramp-capacity-0-foreground = #f53c3c
+ramp-capacity-1 = 
+ramp-capacity-1-foreground = #ffa900
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+bar-capacity-width = 10
+bar-capacity-format = %{+u}%{+o}%fill%%empty%%{-u}%{-o}
+bar-capacity-fill = █
+bar-capacity-fill-foreground = #ddffffff
+bar-capacity-fill-font = 3
+bar-capacity-empty = █
+bar-capacity-empty-font = 3
+bar-capacity-empty-foreground = #44ffffff
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 750
+
+;==============================================================================;
+; /\/\ Right side of the polybar /\/\                                          ;
+;==============================================================================;
+
+;==============================================================================;
+; vvvv UNUSED MODULES vvvv                                                     ;
+;==============================================================================;
+
+[module/powermenu]
+type = custom/menu
+
+expand-left = true
+
+format-padding = 5
+
+label-open = 
+label-open-foreground = ${colors.secondary}
+
+label-close =  cancel
+label-close-foreground = ${colors.secondary}
+
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = systemctl reboot
+
+menu-2-0 = power off
+menu-2-0-exec = systemctl poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+[module/wired-network]
+type = internal/network
+interface = lo
+interval = 3.0
+
+label-connected =    %{T3}%local_ip%%{T-}
+label-disconnected-foreground = #66
+
+[module/mpd]
+type = internal/mpd
+format-online = <icon-prev> <icon-stop> <toggle> <icon-next>  <icon-repeat> <icon-random>  <bar-progress> <label-time>  <label-song>
+
+icon-play = 
+icon-pause = 
+icon-stop = 
+icon-prev = 
+icon-next = 
+icon-random = 
+icon-repeat = 
+
+toggle-on-foreground =
+toggle-off-foreground = #55
+
+bar-progress-width = 45
+bar-progress-format = %{A4:mpdseek+2: A5:mpdseek-2:}%fill%%indicator%%empty%%{A A}
+bar-progress-indicator = |
+bar-progress-indicator-foreground = #ff
+bar-progress-indicator-font = 3
+bar-progress-fill = ─
+bar-progress-fill-foreground = #bb
+bar-progress-fill-font = 3
+bar-progress-empty = ─
+bar-progress-empty-font = 3
+bar-progress-empty-foreground = #44
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+mount-0 = /
+label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.foreground-alt}
+;==============================================================================;
+; /\/\ UNUSED MODULES /\/\                                                     ;
+;==============================================================================;
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+margin-left = 2
+
+; vim:ft=dosini
